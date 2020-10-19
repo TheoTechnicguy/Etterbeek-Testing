@@ -7,8 +7,9 @@ This repository and every file in it, mentioned or not, is licensed under the [G
 ## Requirements
 This repository is designed for Windows 10.
 This repository works with a webbrowser driver.
-* If you use Google Chrome, check the Chrome branch for the appropriate code. [Chromedriver](https://chromedriver.chromium.org/downloads) is here.
 * If you use Mozilla Firefox, check the Firefox branch for the appropriate code. [Geckodriver](https://github.com/mozilla/geckodriver/releases) from Mozilla for Firefox.
+* If you use Google Chrome, check the Chrome branch for the appropriate code. [Chromedriver](https://chromedriver.chromium.org/downloads) from Google for Chrome.
+
 The drivers have to exists in the same (work) directory/folder as the program.
 
 ## Notes on pre-0.2.0 `CovRecord.py` versions.
