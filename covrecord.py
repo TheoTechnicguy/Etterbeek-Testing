@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -112,6 +112,9 @@ inami_search_data = {
 WORK_DIR = os.path.dirname(__file__)
 logging.info("Work directory: %s", WORK_DIR)
 
+# Create Error logs file.
+if not os.path.exists(f"{WORK_DIR}\\errors"):
+    os.mkdir(f"{WORK_DIR}\\errors")
 # Set AutoHotkey script path.
 if os.path.exists(os.path.join(WORK_DIR, "eid_viewer_export.exe")):
     AHK_PATH = os.path.join(WORK_DIR, "eid_viewer_export.exe")
@@ -909,8 +912,12 @@ except SystemExit:
 
 except Exception as e:
     logging.critical(e)
-    shutil.copy(
-        f"{__file__}.log", f"{__file__}-{datetime.datetime.now()}-ERROR.log"
+    now_string = (
+        str(datetime.datetime.now()).replace(" ", "_").replace(":", "-")
+    )
+    shutil.copyfile(
+        f"{__file__}.log",
+        f"{WORK_DIR}\\errors\\{now_string}-ERROR.log",
     )
     raise
     input()
