@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -813,11 +813,14 @@ try:
         while True:
             logging.info("Predicting test tube ID: %s", test_tube_predict)
             full_id["test_tube"] = input(
-                f"Test tube code ({test_tube_predict}) :"
+                f"Test tube code ({test_tube_predict}): "
             )
             # If input empty, use predicted test tube.
             if not full_id["test_tube"] and test_tube_predict:
                 full_id["test_tube"] = test_tube_predict
+            if not full_id["test_tube"] and not test_tube_predict:
+                print("Prediction only works when not empty...")
+                continue
             logging.info("Got test tube %s", full_id["test_tube"])
 
             # Correctly format test tubes.
@@ -834,9 +837,18 @@ try:
             else:
                 # Set next test tube ID prediction into memory.
                 test_tube_decompse = full_id["test_tube"].split("-")
-                assert test_tube_decompse[1].isdigit()
-                test_tube_decompse[1] += 1
-                test_tube_predict = "".join(test_tube_decompse)
+                for i, item in enumerate(test_tube_decompse):
+                    if item.isdigit():
+                        previous_length = len(item)
+                        test_tube_decompse[i] = str(
+                            int(test_tube_decompse[i]) + 1
+                        )
+                        break
+
+                while len(test_tube_decompse[i]) < previous_length:
+                    test_tube_decompse[i] = "0" + test_tube_decompse[i]
+
+                test_tube_predict = "-".join(test_tube_decompse)
                 break
 
             if attempt > 1:
