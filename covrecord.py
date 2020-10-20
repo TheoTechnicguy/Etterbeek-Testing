@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -115,6 +115,13 @@ logging.info("Work directory: %s", WORK_DIR)
 # Create Error logs file.
 if not os.path.exists(f"{WORK_DIR}\\errors"):
     os.mkdir(f"{WORK_DIR}\\errors")
+
+# import authentication keys from auth file.
+logging.info("Getting authentication")
+with open("covrecord.auth", "r", encoding="utf-8") as auth_file:
+    AUTH = json.load(auth_file)
+
+
 # Set AutoHotkey script path.
 if os.path.exists(os.path.join(WORK_DIR, "eid_viewer_export.exe")):
     AHK_PATH = os.path.join(WORK_DIR, "eid_viewer_export.exe")
@@ -171,10 +178,10 @@ drivers["mediris"].get("https://bxltestest.mediris.be/Wachtzaal")
 
 # Login to Mediris page
 drivers["mediris"].find_element_by_xpath('//*[@id="username"]').send_keys(
-    os.environ["MEDIRIS_USER"]
+    AUTH["mediris"]["user"]
 )
 drivers["mediris"].find_element_by_xpath('//*[@id="password"]').send_keys(
-    os.environ["MEDIRIS_PASSWORD"], Keys.RETURN
+    AUTH["mediris"]["password"], Keys.RETURN
 )
 
 # Test tube prediction variable.
@@ -190,7 +197,7 @@ GITHUB_URL = (
 # Authentication is made via a token from github.
 # For security, it is stored as an local_user environment variable.
 header = {
-    "Authenication": "token " + os.environ["GITHUB_CRDEV_TOKEN"],
+    "Authenication": "token " + AUTH["github_token"],
     "accept": "application/vnd.github.v3+json",
 }
 
