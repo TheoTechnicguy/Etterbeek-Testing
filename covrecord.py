@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -938,5 +938,6 @@ except Exception as e:
         f"{__file__}.log",
         f"{WORK_DIR}\\errors\\{now_string}-ERROR.log",
     )
+    # Reraise last error.
     raise
     input()
