@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -372,7 +372,7 @@ try:
                     )
                     time.sleep(3)
                     maximize(drivers["mediris"])
-                    input("Select patient")
+                    input("Select patient and click edit mode")
                     minimize(drivers["mediris"])
                     continue
 
