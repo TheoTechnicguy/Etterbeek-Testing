@@ -64,7 +64,10 @@ else:
         break
 # ---------- END Auto-update ---------
 
-os.symlink(
-    os.path.join(WORK_DIR, "covrecord.py"),
-    os.path.expandvars("%USERPROFILE%\\desktop\\corecord.lnk"),
-)
+try:
+    os.symlink(
+        os.path.join(WORK_DIR, "covrecord.py"),
+        os.path.expandvars("%USERPROFILE%\\desktop\\corecord.lnk"),
+    )
+except FileExistsError:
+    pass
