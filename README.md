@@ -13,7 +13,7 @@ This repository works with a webbrowser driver.
 The drivers have to exists in the same (work) directory/folder as the program.
 
 ## Notes on pre-0.2.0 `CovRecord.py` versions.
-The pre-0.2.0 era of CovRecord was in a private repository (because of built-in logging data) :angel:. At the 0.2.0 version commit, all identifiable authentication have been redacted. It is possible to get a pre-0.2.0 version, you just need to send me an email and I will see what I can do.
+The pre-0.2.0 era of CovRecord was in a private repository (because of built-in login data) :angel:. At the 0.2.0 version commit, all identifiable authentication have been redacted. It is possible to get a pre-0.2.0 version, you just need to send me an email and I will see what I can do.
 
 # Issues
 [Here](https://github.com/TheoTechnicguy/Etterbeek-Testing/issues)

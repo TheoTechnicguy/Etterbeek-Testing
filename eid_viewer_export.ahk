@@ -5,7 +5,7 @@
 ; Ext: shk
 ; Licenced under GPU GLP v3. See LICENCE file for information.
 ; Copyright (c) TheoTechnicguy 2020.
-; Version: 0.1.0
+; Version: 0.1.1
 ; -----------------------
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn  ; Enable warnings to assist with detecting common errors.
@@ -16,6 +16,7 @@ if WinExist("ahk_exe eID Viewer.exe"){
   WinActivate
 } else {
   Run, "C:\Program Files (x86)\Belgium Identity Card\EidViewer\eID Viewer.exe"
+  sleep, 10000
 }
 
 ; -------------

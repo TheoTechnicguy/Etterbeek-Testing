@@ -131,3 +131,6 @@ dmypy.json
 # Ignore driver and executables.
 *driver.exe
 *.exe
+
+# Ignore authentication files.
+*.auth

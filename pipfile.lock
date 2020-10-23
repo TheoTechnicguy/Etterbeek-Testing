@@ -1,0 +1,5 @@
+python>=3.8
+bs4==0.0.1
+pyperclip==1.8.1
+requests==2.24.0
+selenium==3.141.0

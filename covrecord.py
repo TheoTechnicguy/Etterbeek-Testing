@@ -67,14 +67,14 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.0"
+__version__ = "0.2.5"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
 # Set driver location
-GECKO_DRIVER = r"geckodriver.exe"
+GECKO_DRIVER = r"chrmedriver.exe"
 logging.info("Gecko driver located at: %s", GECKO_DRIVER)
-logging.info("Using Firefox driver")
+logging.info("Using Chrome driver")
 
 # CovRecord Form fields and buttons
 FIELDS = {
@@ -111,6 +111,16 @@ inami_search_data = {
 # Set work directory
 WORK_DIR = os.path.dirname(__file__)
 logging.info("Work directory: %s", WORK_DIR)
+
+# Create Error logs file.
+if not os.path.exists(f"{WORK_DIR}\\errors"):
+    os.mkdir(f"{WORK_DIR}\\errors")
+
+# import authentication keys from auth file.
+logging.info("Getting authentication")
+with open("covrecord.auth", "r", encoding="utf-8") as auth_file:
+    AUTH = json.load(auth_file)
+
 
 # Set AutoHotkey script path.
 if os.path.exists(os.path.join(WORK_DIR, "eid_viewer_export.exe")):
@@ -168,10 +178,10 @@ drivers["mediris"].get("https://bxltestest.mediris.be/Wachtzaal")
 
 # Login to Mediris page
 drivers["mediris"].find_element_by_xpath('//*[@id="username"]').send_keys(
-    os.environ["MEDIRIS_USER"]
+    AUTH["mediris"]["user"]
 )
 drivers["mediris"].find_element_by_xpath('//*[@id="password"]').send_keys(
-    os.environ["MEDIRIS_PASSWORD"], Keys.RETURN
+    AUTH["mediris"]["password"], Keys.RETURN
 )
 
 # Test tube prediction variable.
@@ -187,7 +197,7 @@ GITHUB_URL = (
 # Authentication is made via a token from github.
 # For security, it is stored as an local_user environment variable.
 header = {
-    "Authenication": "token " + os.environ["GITHUB_CRDEV_TOKEN"],
+    "Authenication": "token " + AUTH["github_token"],
     "accept": "application/vnd.github.v3+json",
 }
 
@@ -362,7 +372,7 @@ try:
                     )
                     time.sleep(3)
                     maximize(drivers["mediris"])
-                    input("Select patient")
+                    input("Select patient and click edit mode")
                     minimize(drivers["mediris"])
                     continue
 
@@ -810,11 +820,14 @@ try:
         while True:
             logging.info("Predicting test tube ID: %s", test_tube_predict)
             full_id["test_tube"] = input(
-                f"Test tube code ({test_tube_predict}) :"
+                f"Test tube code ({test_tube_predict}): "
             )
             # If input empty, use predicted test tube.
             if not full_id["test_tube"] and test_tube_predict:
                 full_id["test_tube"] = test_tube_predict
+            if not full_id["test_tube"] and not test_tube_predict:
+                print("Prediction only works when not empty...")
+                continue
             logging.info("Got test tube %s", full_id["test_tube"])
 
             # Correctly format test tubes.
@@ -831,9 +844,18 @@ try:
             else:
                 # Set next test tube ID prediction into memory.
                 test_tube_decompse = full_id["test_tube"].split("-")
-                assert test_tube_decompse[1].isdigit()
-                test_tube_decompse[1] += 1
-                test_tube_predict = "".join(test_tube_decompse)
+                for i, item in enumerate(test_tube_decompse):
+                    if item.isdigit():
+                        previous_length = len(item)
+                        test_tube_decompse[i] = str(
+                            int(test_tube_decompse[i]) + 1
+                        )
+                        break
+
+                while len(test_tube_decompse[i]) < previous_length:
+                    test_tube_decompse[i] = "0" + test_tube_decompse[i]
+
+                test_tube_predict = "-".join(test_tube_decompse)
                 break
 
             if attempt > 1:
@@ -909,8 +931,13 @@ except SystemExit:
 
 except Exception as e:
     logging.critical(e)
-    shutil.copy(
-        f"{__file__}.log", f"{__file__}-{datetime.datetime.now()}-ERROR.log"
+    now_string = (
+        str(datetime.datetime.now()).replace(" ", "_").replace(":", "-")
     )
+    shutil.copyfile(
+        f"{__file__}.log",
+        f"{WORK_DIR}\\errors\\{now_string}-ERROR.log",
+    )
+    # Reraise last error.
     raise
     input()
