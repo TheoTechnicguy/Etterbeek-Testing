@@ -72,9 +72,9 @@ __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
 # Set driver location
-GECKO_DRIVER = r"geckodriver.exe"
+GECKO_DRIVER = r"chrmedriver.exe"
 logging.info("Gecko driver located at: %s", GECKO_DRIVER)
-logging.info("Using Firefox driver")
+logging.info("Using Chrome driver")
 
 # CovRecord Form fields and buttons
 FIELDS = {
