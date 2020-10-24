@@ -9,6 +9,7 @@
 import os
 import requests
 import json
+import shutil
 
 FUTURE_WORK_DIR = os.path.join(os.path.expandvars("%APPDATA%"), "covrecord")
 
@@ -55,10 +56,13 @@ else:
         for asset in release["assets"]:
             # Only get the release if does not exist.
             if not os.path.exists(os.path.join(WORK_DIR, asset["name"])):
-                with open(asset["name"], "wb+") as file:
+                with open(
+                    os.path.join(WORK_DIR, asset["name"]), "wb+"
+                ) as file:
                     file.write(
-                        requests.get(asset["browser_download_url"].content)
+                        requests.get(asset["browser_download_url"]).content
                     )
+                print("Got", asset["name"])
 
         # Only check 1st release because they are (or should be) incremental.
         break
@@ -66,8 +70,10 @@ else:
 
 try:
     os.symlink(
-        os.path.join(WORK_DIR, "covrecord.py"),
+        os.path.join(WORK_DIR, "covrecord.exe"),
         os.path.expandvars("%USERPROFILE%\\desktop\\corecord.lnk"),
     )
 except FileExistsError:
     pass
+
+shutil.copyfile("covrecord.auth", os.path.join(WORK_DIR, "covrecord.auth"))
