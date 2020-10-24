@@ -67,7 +67,7 @@ logging.basicConfig(
 )
 
 logging.info("Started")
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 __author__ = "Theo Technicguy"
 logging.info("Version: %s by %s", __version__, __author__)
 
@@ -226,7 +226,7 @@ else:
                 if not os.path.exists(os.path.join(WORK_DIR, asset["name"])):
                     with open(asset["name"], "wb+") as file:
                         file.write(
-                            requests.get(asset["browser_download_url"].content)
+                            requests.get(asset["browser_download_url"]).content
                         )
                 else:
                     logging.info("File already exists.")
